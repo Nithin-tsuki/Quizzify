@@ -1,0 +1,79 @@
+/* General Layout */
+.fl-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: white; 
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+  }
+  
+  .fl-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .fl-loading {
+    text-align: center;
+    color: #888;
+  }
+  
+  .fl-empty {
+    text-align: center;
+    color: #888;
+  }
+  
+  .fl-friends-list, .fl-students-list {
+    margin-top: 1rem;
+  }
+  
+  .fl-friend-item,
+  .fl-student-item {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .fl-friend-item:hover,
+  .fl-student-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .fl-selected {
+    background-color: #394867;
+    color: white;
+  }
+  .fl-selected:hover{
+    color: black;
+  }
+  
+  .fl-default {
+    background-color: #f0f0f0;
+  }
+  
+  .fl-student-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .fl-add-btn {
+    background-color: #394867;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .fl-add-btn:hover {
+    background-color: #9BA4B4;
+    color:black;
+  }

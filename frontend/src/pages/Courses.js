@@ -152,7 +152,7 @@ const Courses = () => {
   }, []);
 
   const handleClick = (course) => {
-    if (!role) {
+    if (!user) {
       navigate('/login');
       return;
     }

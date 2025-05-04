@@ -66,7 +66,9 @@ select {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
 } */
-.page {
+
+
+/* .page {
   max-width: 900px;
   margin: 0 auto;
   background-color: #f5f7fa;
@@ -142,6 +144,94 @@ select {
   margin-top: 30px;
 }
 .quiz-settings select {
-  height: 50px; /* Increase height */
-  font-size: 16px; /* Optional: bigger text */
+  height: 50px;
+  font-size: 16px;
+} */
+
+.cqz-container {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.cqz-form-box {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 48rem;
+}
+
+.cqz-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.cqz-label {
+  display: block;
+  color: #374151;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.cqz-input {
+  width: 90%;
+  height:10%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.cqz-questions {
+  margin-top: 1.5rem;
+}
+
+.cqz-question-block {
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cqz-button {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  margin-top: 0.75rem;
+}
+
+.cqz-add-btn {
+  background-color: #394867;
+}
+
+.cqz-add-btn:hover {
+  background-color: #9BA4B4;
+  color:black
+}
+
+.cqz-save-btn {
+  background-color: #16a34a;
+}
+
+.cqz-save-btn:hover {
+  background-color: #15803d;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
 }

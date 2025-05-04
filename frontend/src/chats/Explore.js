@@ -62,7 +62,93 @@
 // };
 
 // export default Explore;
+
+
+// import React, { useState } from "react";
+
+// const Explore = ({ onNavigateToChat }) => {
+//   const [posts, setPosts] = useState([]);
+//   const [newPostText, setNewPostText] = useState("");
+//   const [newPostImage, setNewPostImage] = useState(null);
+
+//   // Handle new post submission
+//   const handlePostSubmit = () => {
+//     if (newPostText.trim() || newPostImage) {
+//       const newPost = {
+//         id: Date.now(),
+//         text: newPostText,
+//         image: newPostImage ? URL.createObjectURL(newPostImage) : null,
+//       };
+//       setPosts([newPost, ...posts]);
+//       setNewPostText("");
+//       setNewPostImage(null);
+//     }
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center p-6 max-w-lg mx-auto">
+//       {/* Header */}
+//       <div className="w-full flex justify-between items-center mb-4">
+//         <h2 className="text-2xl font-semibold">Explore</h2>
+//         <button
+//           onClick={onNavigateToChat}
+//           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+//         >
+//           Go to Chat
+//         </button>
+//       </div>
+
+//       {/* New Post Section */}
+//       <div className="w-full bg-white p-4 shadow-md rounded-lg mb-6">
+//         <textarea
+//           className="w-full h-24 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+//           placeholder="Share your thoughts..."
+//           value={newPostText}
+//           onChange={(e) => setNewPostText(e.target.value)}
+//         />
+//         <div className="flex justify-between items-center mt-3">
+//           <input
+//             type="file"
+//             accept="image/*"
+//             className="text-sm"
+//             onChange={(e) => setNewPostImage(e.target.files[0])}
+//           />
+//           <button
+//             onClick={handlePostSubmit}
+//             className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition"
+//           >
+//             Post
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Posts Feed */}
+//       <div className="w-full">
+//         {posts.length === 0 ? (
+//           <p className="text-gray-500 text-center">No posts yet. Be the first to share something!</p>
+//         ) : (
+//           posts.map((post) => (
+//             <div key={post.id} className="bg-white p-4 shadow-md rounded-lg mb-4">
+//               <p className="text-gray-800">{post.text}</p>
+//               {post.image && (
+//                 <img
+//                   src={post.image}
+//                   alt="User post"
+//                   className="mt-3 w-full max-w-full h-auto rounded-md"
+//                 />
+//               )}
+//             </div>
+//           ))
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Explore;
+
 import React, { useState } from "react";
+import "../styles/explore.css";
 
 const Explore = ({ onNavigateToChat }) => {
   const [posts, setPosts] = useState([]);
@@ -84,36 +170,36 @@ const Explore = ({ onNavigateToChat }) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 max-w-lg mx-auto">
+    <div className="e-container">
       {/* Header */}
-      <div className="w-full flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">Explore</h2>
+      <div className="e-header">
+        <h2 className="e-title">Explore</h2>
         <button
           onClick={onNavigateToChat}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+          className="e-button e-chat-button"
         >
           Go to Chat
         </button>
       </div>
 
       {/* New Post Section */}
-      <div className="w-full bg-white p-4 shadow-md rounded-lg mb-6">
+      <div className="e-post-section">
         <textarea
-          className="w-full h-24 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+          className="e-textarea"
           placeholder="Share your thoughts..."
           value={newPostText}
           onChange={(e) => setNewPostText(e.target.value)}
         />
-        <div className="flex justify-between items-center mt-3">
+        <div className="e-actions">
           <input
             type="file"
             accept="image/*"
-            className="text-sm"
+            className="e-file-input"
             onChange={(e) => setNewPostImage(e.target.files[0])}
           />
           <button
             onClick={handlePostSubmit}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition"
+            className="e-button e-post-button"
           >
             Post
           </button>
@@ -121,18 +207,20 @@ const Explore = ({ onNavigateToChat }) => {
       </div>
 
       {/* Posts Feed */}
-      <div className="w-full">
+      <div className="e-posts-feed">
         {posts.length === 0 ? (
-          <p className="text-gray-500 text-center">No posts yet. Be the first to share something!</p>
+          <p className="e-no-posts-message">
+            No posts yet. Be the first to share something!
+          </p>
         ) : (
           posts.map((post) => (
-            <div key={post.id} className="bg-white p-4 shadow-md rounded-lg mb-4">
-              <p className="text-gray-800">{post.text}</p>
+            <div key={post.id} className="e-post-card">
+              <p className="e-post-text">{post.text}</p>
               {post.image && (
                 <img
                   src={post.image}
                   alt="User post"
-                  className="mt-3 w-full max-w-full h-auto rounded-md"
+                  className="e-post-image"
                 />
               )}
             </div>

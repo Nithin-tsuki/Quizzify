@@ -19,30 +19,24 @@ export const getSentUsers = async (req, res) => {
 // Fetch messages between two users
 export const getMessages = async (req, res) => {
   try {
-    const { sender, receiver } = req.params;
-    console.log(sender, receiver);
-    const send = await Student.findOne({ name: sender });
-    const receive = await Student.findOne({ name: receiver });
-
-    if (!send || !receive) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
+    const { sender, receiver } = req.params; // These are now expected to be _id values
+    console.log("getting messages:",sender, receiver);
     const messages = await Message.find({
       $or: [
-        { senderId: send._id, receiverId: receive._id },
-        { senderId: receive._id, receiverId: send._id },
+        { senderId: sender, receiverId: receiver },
+        { senderId: receiver, receiverId: sender },
       ],
     })
       .sort({ timestamp: 1 })
-      .populate("senderId receiverId", "username");
-
+      .populate("senderId receiverId", "username"); // Optional: adjust if 'username' exists
+    console.log(messages);
     res.json(messages);
   } catch (error) {
     console.error("Error fetching messages:", error);
     res.status(500).json({ error: "Error fetching messages" });
   }
 };
+
 export const deleteMessage = async (req, res) => {
   try {
     const { messageId } = req.params;

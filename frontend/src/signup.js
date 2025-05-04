@@ -151,14 +151,14 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const { role, username, password, confirmPassword, email, fullName } = formData;
-
+  
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-
+  
     try {
       const response = await fetch('http://localhost:5001/api/users', {
         method: 'POST',
@@ -167,26 +167,29 @@ const Signup = () => {
         },
         body: JSON.stringify({ role, username, password, email, fullName })
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to register user.');
       }
-
+  
       const result = await response.json();
       console.log('User registered:', result);
-
-      // Save to localStorage
-      localStorage.setItem('role', role);
-      localStorage.setItem('username', username);
-      localStorage.setItem('email', email);
-      localStorage.setItem('fullName', fullName);
-
+  
+      // Save entire user object to localStorage
+      localStorage.setItem('user', JSON.stringify({
+        role,
+        username,
+        email,
+        fullName
+      }));
+  
       navigate('/home');
     } catch (error) {
       alert(`Registration failed: ${error.message}`);
     }
   };
+  
 
   return (
     <section id="section1" className="section">

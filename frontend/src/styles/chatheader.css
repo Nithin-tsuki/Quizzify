@@ -1,0 +1,46 @@
+.chh-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chh-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .chh-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    object-fit: cover;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chh-username {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2d2d2d;
+  }
+  
+  .chh-unfollow-btn {
+    background-color: #ef4444;
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .chh-unfollow-btn:hover {
+    background-color: #dc2626;
+  }

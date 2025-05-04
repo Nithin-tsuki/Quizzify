@@ -2,52 +2,95 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/tdch.css';
 
+// Backend API helpers
+const API_BASE = 'http://localhost:5001/api';
+
+const fetchChallenges = async () => {
+  const res = await fetch(`${API_BASE}/challenges`);
+  return res.json();
+};
+
+const fetchProgress = async (userId, challengeId) => {
+  const res = await fetch(`${API_BASE}/progress?userId=${userId}&challengeId=${challengeId}`);
+  return res.json();
+};
+
+const toggleProgress = async (userId, challengeId, day) => {
+  const res = await fetch(`${API_BASE}/progress/toggle`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, challengeId, day }),
+  });
+  return res.json();
+};
+
 const ChallengeTracker = () => {
   const navigate = useNavigate();
-  const role = localStorage.getItem('role');
+  const user = localStorage.getItem('user');
+  const role = user ? JSON.parse(user).role : null;
+  const userId = user ? JSON.parse(user).userid : null;
 
-  const courses = [
-    { 
-      id: 'course1', 
-      name: "Front-End Development", 
-      instructor: "John Doe", 
-      lessons: Array(30).fill({ completed: false, videoUrl: "#", notes: "https://example.com/notes1.pdf" }) 
-    },
-    { 
-      id: 'course2', 
-      name: "Data Structures & Algorithms", 
-      instructor: "Jane Smith", 
-      lessons: Array(30).fill({ completed: false, videoUrl: "#", notes: "https://example.com/notes2.pdf" }) 
-    },
-    { 
-      id: 'course3', 
-      name: "Deep Learning", 
-      instructor: "Dr. Emily Clark", 
-      lessons: Array(30).fill({ completed: false, videoUrl: "#", notes: "https://example.com/notes3.pdf" }) 
-    }
-  ];
-
-  const [courseData, setCourseData] = useState(courses);
+  const [courseData, setCourseData] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseConfirmation, setShowCourseConfirmation] = useState(false);
   const [currentCourseIndex, setCurrentCourseIndex] = useState(null);
-  const [expandedLesson, setExpandedLesson] = useState(null);
-  const [selectedLesson, setSelectedLesson] = useState(null); // New for overlay
+  const [selectedLesson, setSelectedLesson] = useState(null);
 
-  const toggleLesson = (courseIndex, lessonIndex) => {
-    const newCourseData = [...courseData];
-    newCourseData[courseIndex].lessons[lessonIndex] = {
-      ...newCourseData[courseIndex].lessons[lessonIndex],
-      completed: !newCourseData[courseIndex].lessons[lessonIndex].completed
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        const response = await fetchChallenges();
+
+        if (!Array.isArray(response)) {
+          console.error("Invalid course data:", response);
+          return;
+        }
+
+        const formattedCourses = response.map(challenge => ({
+          id: challenge._id,  // Using _id from MongoDB
+          name: challenge.subject,
+          instructor: challenge.instructorId,  // Assuming instructor is represented by ID
+          lessons: challenge.days.map((day, index) => ({
+            completed: false,
+            videoUrl: day.videoUrl || "#",
+            notes: day.notesUrl || "#",
+            title: `Day ${day.day}: ${day.title}`
+          }))
+        }));
+
+        console.log("Formatted courses:", formattedCourses);
+        setCourseData(formattedCourses);
+      } catch (error) {
+        console.error('Error loading courses:', error);
+      }
     };
-    setCourseData(newCourseData);
+
+    loadCourses();
+  }, []);
+
+  const toggleLesson = async (courseIndex, lessonIndex) => {
+    const course = courseData[courseIndex];
+    const day = lessonIndex + 1;
+
+    await toggleProgress(userId, course.id, day);
+
+    const updatedCourses = [...courseData];
+    const currentLesson = updatedCourses[courseIndex].lessons[lessonIndex];
+    updatedCourses[courseIndex].lessons[lessonIndex] = {
+      ...currentLesson,
+      completed: !currentLesson.completed,
+    };
+    setCourseData(updatedCourses);
   };
 
-  const getCourseProgress = (lessons) => {
-    return (lessons.filter(lesson => lesson.completed).length / 30) * 100;
-  };
+  const getCourseProgress = (lessons) =>
+    (lessons.filter((lesson) => lesson.completed).length / lessons.length) * 100;
 
-  const overallProgress = (courseData.reduce((acc, course) => acc + course.lessons.filter(lesson => lesson.completed).length, 0) / (30 * courseData.length)) * 100;
+  const overallProgress = courseData.length
+    ? (courseData.reduce((acc, course) => acc + course.lessons.filter((l) => l.completed).length, 0) /
+        (30 * courseData.length)) *
+      100
+    : 0;
 
   const handleCourseClick = (index) => {
     if (!role) {
@@ -58,9 +101,23 @@ const ChallengeTracker = () => {
     }
   };
 
-  const handleConfirmAccess = () => {
-    setShowCourseConfirmation(false);
+  const handleConfirmAccess = async () => {
+    const course = courseData[currentCourseIndex];
+
+    const progressData = await fetchProgress(userId, course.id);
+    const completedLessons = new Set(progressData?.completedLessons || []);
+
+    const updatedLessons = course.lessons.map((lesson, i) => ({
+      ...lesson,
+      completed: completedLessons.has(i + 1),
+    }));
+
+    const updatedCourses = [...courseData];
+    updatedCourses[currentCourseIndex].lessons = updatedLessons;
+
+    setCourseData(updatedCourses);
     setSelectedCourse(currentCourseIndex);
+    setShowCourseConfirmation(false);
   };
 
   const handleDayClick = (lesson) => {
@@ -68,7 +125,10 @@ const ChallengeTracker = () => {
   };
 
   const handleOverlayClick = (e) => {
-    if (e.target.classList.contains('overlay') || e.target.classList.contains('lesson-details-overlay')) {
+    if (
+      e.target.classList.contains('overlay') ||
+      e.target.classList.contains('lesson-details-overlay')
+    ) {
       setShowCourseConfirmation(false);
       setSelectedLesson(null);
     }
@@ -84,7 +144,9 @@ const ChallengeTracker = () => {
   return (
     <div className="tracker-page">
       <h1 className="tracker-heading">#30DayChallenge Tracker</h1>
-      <p className="tracker-subtext">Pick a course, track your lessons, and stay on track!</p>
+      <p className="tracker-subtext">
+        Pick a course, track your lessons, and stay on track!
+      </p>
 
       <div className="progress-container">
         <div className="progress-bar" style={{ width: `${overallProgress}%` }} />
@@ -101,7 +163,10 @@ const ChallengeTracker = () => {
               {course.name} - {course.instructor} (ID: {course.id})
             </h2>
             <div className="course-progress-bar">
-              <div className="progress-bar" style={{ width: `${getCourseProgress(course.lessons)}%` }} />
+              <div
+                className="progress-bar"
+                style={{ width: `${getCourseProgress(course.lessons)}%` }}
+              />
             </div>
 
             {selectedCourse === courseIndex && (
@@ -112,11 +177,13 @@ const ChallengeTracker = () => {
                     className={`lesson-day ${lesson.completed ? 'completed' : ''}`}
                     onClick={() => handleDayClick(lesson)}
                   >
-                    <span>Day {lessonIndex + 1} - Lesson {lessonIndex + 1}</span>
+                    <span>
+                      {lesson.title} - Lesson {lessonIndex + 1}
+                    </span>
                     <input
                       type="checkbox"
                       checked={lesson.completed}
-                      onClick={(e) => e.stopPropagation()}  // ← add stopPropagation here
+                      onClick={(e) => e.stopPropagation()}
                       onChange={() => toggleLesson(courseIndex, lessonIndex)}
                     />
                   </div>
@@ -127,10 +194,12 @@ const ChallengeTracker = () => {
         ))}
       </div>
 
-      {showCourseConfirmation && (
+      {showCourseConfirmation && currentCourseIndex !== null && (
         <div className="overlay">
           <div className="confirmation-popup">
-            <p>Do you want to access the course: {courseData[currentCourseIndex].name}?</p>
+            <p>
+              Do you want to access the course: {courseData[currentCourseIndex].name}?
+            </p>
             <button onClick={handleConfirmAccess}>Yes</button>
             <button onClick={() => setShowCourseConfirmation(false)}>No</button>
           </div>
@@ -140,8 +209,20 @@ const ChallengeTracker = () => {
       {selectedLesson && (
         <div className="lesson-details-overlay">
           <div className="lesson-details-popup">
-            <a href={selectedLesson.videoUrl} target="_blank" rel="noopener noreferrer">Watch Video</a>
-            <a href={selectedLesson.notes} target="_blank" rel="noopener noreferrer">View Notes (PDF)</a>
+            <a
+              href={selectedLesson.videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Watch Video
+            </a>
+            <a
+              href={selectedLesson.notes}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View Notes (PDF)
+            </a>
             <button onClick={() => setSelectedLesson(null)}>Close</button>
           </div>
         </div>

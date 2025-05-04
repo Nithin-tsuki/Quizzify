@@ -9,6 +9,10 @@ import courseRoutes from './router/courseRoutes.js';
 import chatRoutes from './router/chatRoutes.js';
 import friendsRoutes from './router/friendsRoutes.js';
 import quizRoutes from './router/quizRoutes.js';
+import challengeRoutes from './router/challengeRoutes.js';
+import progressRoutes from './router/progressRoutes.js';
+
+
 dotenv.config();
 
 const app = express();
@@ -40,6 +44,10 @@ app.use("/api/courses", courseRoutes);
 app.use("/chat", chatRoutes);
 app.use("/friends", friendsRoutes);
 app.use("/quiz", quizRoutes);
+app.use('/api/challenges', challengeRoutes);
+app.use('/api/progress', progressRoutes);
+
+
 app.get('/', (req, res) => {
   res.send('Hello World with MongoDB connected!');
 });

@@ -109,12 +109,10 @@ const Body = () => {
   });
   
   useEffect(() => {
-    const interval = setInterval(() => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const currentRole = user?.role || "default";
-      setRole(prev => (prev !== currentRole ? currentRole : prev));
-    }, 1000);
-    return () => clearInterval(interval);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.role) {
+      setRole(user.role);
+    }
   }, []);
   
   if (role === "teacher") {
