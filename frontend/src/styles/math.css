@@ -1,0 +1,119 @@
+.math-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.math-header {
+  text-align: center;
+  font-size: 2rem;
+  color: #394867;
+  margin-bottom: 30px;
+}
+
+.module-box {
+  background-color: #394867;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  color: #fff;
+}
+
+.module-box:hover {
+  background-color: #9BA4B4;
+  color: black;
+}
+
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.module-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.module-content {
+  margin-top: 15px;
+  background-color: #f0f2f5;
+  padding: 15px;
+  border-radius: 8px;
+  color: #333;
+}
+
+.resource-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.notes-link {
+  color: #394867;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.completed-text {
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+/* Flip switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #9BA4B4;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+  background-color: #394867;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}

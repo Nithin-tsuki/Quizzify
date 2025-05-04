@@ -1,0 +1,24 @@
+#section1{
+    width:100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-image:url('../imagesVideos/loginback.jpg'); */
+}
+#signup{
+    height: 70%;
+    width: 35%;
+    border: 2px solid black;
+    border-radius: 1rem;
+    background-image: none;
+    background-color: #9BA4B4;
+    display: flex;
+    justify-self: flex-start;
+}
+#signup .s{
+    width: 100%;
+}
+#signup form{
+    width: 90%;
+}

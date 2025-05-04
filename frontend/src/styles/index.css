@@ -1,0 +1,51 @@
+body{
+    /* font-family: mystyle; */
+    font-size:16px;
+    line-height: 1.6em;
+    margin:0;
+    background-color: #F1F6F9;
+}
+input::placeholder,option,select{
+    /* font-family: mystyle; */
+    font-size:16px;
+    text-align: center;
+}
+@font-face{
+    /* font-family: mystyle; */
+    src:url('links.ttf');
+}
+input[type='submit']{
+    background-color: #394867;
+    height:33px;    
+    /* font-family: mystyle; */
+    font-size:18px;
+    color:#f4f4f4;
+}
+button{
+    /* font-family:mystyle; */
+}
+main{
+    flex:1;
+} 
+/* layout.css */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    /* flex: 1; */
+    padding-top: 10%;
+    padding-top: 75px;
+    margin-top: 100px;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+}
+  

@@ -1,0 +1,189 @@
+/* .profile-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+    color: #333;
+  }
+  
+  .profile-info p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #444;
+  }
+   */
+   /* Profile Container */
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Profile Header */
+.profile-header {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.profile-header .profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.profile-header h1 {
+  font-size: 32px;
+  color: #333;
+  margin: 10px 0;
+}
+
+.profile-header p {
+  font-size: 18px;
+  color: #777;
+}
+
+/* Profile Section */
+.profile-section {
+  margin-bottom: 40px;
+}
+
+.profile-section h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.profile-section p {
+  font-size: 18px;
+  color: #555;
+  margin: 8px 0;
+}
+
+.profile-section .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.profile-section .btn:hover {
+  background-color: #0056b3;
+}
+
+/* Teacher Profile */
+.teacher-profile {
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.teacher-tools {
+  margin-top: 40px;
+}
+
+.teacher-tools h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Cards for Teacher Tools */
+.tools-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.card h3 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.card .btn {
+  background-color: #28a745;
+}
+
+.card .btn:hover {
+  background-color: #218838;
+}
+
+/* Student Profile */
+.student-profile {
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.student-tools {
+  margin-top: 40px;
+}
+
+.student-tools h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Cards for Student Tools */
+.tools-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.card h3 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.card .btn {
+  background-color: #007bff;
+}
+
+.card .btn:hover {
+  background-color: #0056b3;
+}

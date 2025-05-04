@@ -1,0 +1,230 @@
+.tracker-page {
+  padding: 60px 20px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.tracker-heading {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #394867;
+  margin-bottom: 20px;
+}
+
+.tracker-subtext {
+  text-align: center;
+  color: #394867;
+  margin-bottom: 40px;
+}
+
+.progress-container {
+  width: 100%;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #394867;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.courses-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.course-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.course-name {
+  font-size: 1.5rem;
+  color: #394867;
+  margin-bottom: 15px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.course-name:hover {
+  color: #3498db;
+}
+
+.course-progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.lesson-day {
+  background-color: #394867;
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lesson-day.completed {
+  background-color: #9ba4b4;
+  text-decoration: line-through;
+  color: #f0f0f0;
+}
+
+.lesson-day input {
+  transform: scale(1.2);
+  accent-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+}
+
+.confirmation-popup button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #3498db;
+  margin: 1rem;/* Overlay for Lesson Details */
+  .lesson-details-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .lesson-details-popup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .lesson-details-popup a {
+    display: block;
+    margin-bottom: 10px;
+    color: #3498db;
+    text-decoration: none;
+  }
+  
+  .lesson-details-popup button {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .lesson-details-popup button:hover {
+    background-color: #2980b9;
+  }
+  
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirmation-popup button:hover {
+  background-color: #2980b9;
+}
+/* Your existing CSS is fine! Just add these styles below to tdch.css */
+
+.lesson-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.lesson-details-popup {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-details-popup a {
+  display: block;
+  margin-bottom: 10px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.lesson-details-popup a:hover {
+  text-decoration: underline;
+}
+
+.lesson-details-popup button {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.lesson-details-popup button:hover {
+  background-color: #2980b9;
+}

@@ -1,0 +1,96 @@
+/* === Common Container Styling === */
+.chat-container,
+.gcchat-container {
+  width: 100%;
+  max-width: 550px;
+  height: 500px;
+  margin: 2rem auto;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* === Common Header Styling === */
+.chat-header {
+  background-color: #21325E;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* === Common Messages Area === */
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* === Bubble Styling (Used in Both Chats) === */
+.chat-bubble {
+  padding: 0.7rem 1rem;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+/* === Chat Only (Friend/You Message Alignment) === */
+.chat-bubble.user {
+  align-self: flex-end;
+  background-color: #c3f0ca;
+  border-bottom-right-radius: 0;
+}
+
+.chat-bubble.friend {
+  align-self: flex-start;
+  background-color: #dce3f0;
+  border-bottom-left-radius: 0;
+}
+
+/* === GC Chat Only === */
+.chat-bubble.global {
+  align-self: flex-start;
+  background-color: #e8e8e8;
+  border-radius: 10px;
+}
+
+/* === Common Input Section === */
+.chat-input {
+  display: flex;
+  padding: 0.8rem;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-right: 0.5rem;
+}
+
+.chat-input button {
+  background-color: #9BA4B4;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid black;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.chat-input button:hover {
+  background-color: #21325E;
+}
