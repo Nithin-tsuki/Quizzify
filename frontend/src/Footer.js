@@ -103,23 +103,14 @@
 
 // export default Footer;
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "./styles/footer.css";
 import ChatBot from './pages/chatbot.js';
 
 const Footer = () => {
-  const navigate = useNavigate();
   const user = localStorage.getItem("user");
-
-  // Redirect if no user
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
   const parsedUser = user ? JSON.parse(user) : null;
-  const [role, setRole] = useState(parsedUser?.role || "student");
+  const [role, setRole] = useState(parsedUser?.role || "student"); // default to student
 
   const renderFooterLinks = () => (
     <>

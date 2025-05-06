@@ -62,8 +62,9 @@ export const sendMessage = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const sender = await Student.findOne({ username: senderId });
-    const receiver = await Student.findOne({ username: receiverId });
+    const sender = await Student.findById(senderId);
+const receiver = await Student.findById(receiverId);
+    console.log(sender, receiver);
 
     if (!sender || !receiver) {
       return res.status(404).json({ error: "User not found" });

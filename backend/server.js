@@ -11,7 +11,9 @@ import friendsRoutes from './router/friendsRoutes.js';
 import quizRoutes from './router/quizRoutes.js';
 import challengeRoutes from './router/challengeRoutes.js';
 import progressRoutes from './router/progressRoutes.js';
+import quizgetRoutes from './router/quizzes.js';
 
+import QuizChallengeRoutes from './router/quizChallengeRoutes.js';
 
 dotenv.config();
 
@@ -46,6 +48,8 @@ app.use("/friends", friendsRoutes);
 app.use("/quiz", quizRoutes);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/quizchallenges', QuizChallengeRoutes);
+app.use('/quizzes', quizgetRoutes);
 
 
 app.get('/', (req, res) => {
@@ -63,7 +67,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (messageData) => {
-    const roomId = getRoomId(messageData.senderUsername, messageData.receiverUsername);
+    const roomId = getRoomId(messageData.senderId, messageData.receiverId);
     io.to(roomId).emit("newMessage", messageData);
     console.log("📤 Broadcasted message to room:", roomId);
   });

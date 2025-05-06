@@ -576,12 +576,27 @@ const Social = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("receive_message", (message) => {
+    // socket.on("receive_message", (message) => {
+    //   const currentUser = JSON.parse(localStorage.getItem("user"));
+    //   const friendId =
+    //     message.senderId === currentUser._id ? message.receiverId : message.senderId;
+    
+    //   const key = typeof friendId === "object" ? friendId._id : friendId; // fallback
+    
+    //   setMessagesMap((prevMessages) => ({
+    //     ...prevMessages,
+    //     [key]: [...(prevMessages[key] || []), message],
+    //   }));
+    // });
+    
+
+    // return () => socket.off("receive_message");
+    socket.on("newMessage", (message) => {
       const currentUser = JSON.parse(localStorage.getItem("user"));
       const friendId =
-        message.senderId === currentUser._id ? message.receiverId : message.senderId;
+        message.senderId === currentUser.userid ? message.receiverId : message.senderId;
     
-      const key = typeof friendId === "object" ? friendId._id : friendId; // fallback
+      const key = typeof friendId === "object" ? friendId._id : friendId;
     
       setMessagesMap((prevMessages) => ({
         ...prevMessages,
@@ -589,35 +604,49 @@ const Social = () => {
       }));
     });
     
-
-    return () => socket.off("receive_message");
+    return () => socket.off("newMessage"); // Make sure you clean up
+    
   }, []);
 
   const handleSelectFriend = async (friend) => {
     setShowExplore(false);
     setSelectedFriend(friend);
-
-    if (!messagesMap[friend.userid]) {
+  
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.userid) return;
+  
+    // Join room when a friend is selected
+    socket.emit("joinRoom", {
+      sender: user.userid,
+      receiver: friend._id,
+    });
+  
+    if (!messagesMap[friend._id]) {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user || !user.userid) return;
-        console.log(user.userid, friend._id,friend);
         const response = await axios.get(`${API_URL}/chat/${user.userid}/${friend._id}`);
         setMessagesMap((prev) => ({ ...prev, [friend._id]: response.data }));
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     }
   };
-
+  
+  const handleDeleteMessage = (messageId) => {
+    if (!selectedFriend || !messagesMap[selectedFriend._id]) return;
+  
+    setMessagesMap((prev) => ({
+      ...prev,
+      [selectedFriend._id]: prev[selectedFriend._id].filter((msg) => msg._id !== messageId),
+    }));
+  };
+  
   const handleSendMessage = async () => {
     if (!selectedFriend || !newMessage.trim()) return;
     const user = JSON.parse(localStorage.getItem("user"));
 
     const message = {
-      senderId: user.username,
-      receiverId: selectedFriend.username,
+      senderId: user.userid,
+      receiverId: selectedFriend._id,
       text: newMessage,
     };
 
@@ -625,13 +654,13 @@ const Social = () => {
       const response = await axios.post(`${API_URL}/chat/send`, message);
       const savedMessage = response.data;
 
-      setMessagesMap((prevMessages) => ({
-        ...prevMessages,
-        [selectedFriend._id]: [...(prevMessages[selectedFriend._id] || []), savedMessage],
-      }));
+      // setMessagesMap((prevMessages) => ({
+      //   ...prevMessages,
+      //   [selectedFriend._id]: [...(prevMessages[selectedFriend._id] || []), savedMessage],
+      // }));
       
 
-      socket.emit("send_message", savedMessage);
+      socket.emit("sendMessage", savedMessage);
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -656,7 +685,9 @@ const Social = () => {
             <ChatMessages
   messages={messagesMap[selectedFriend._id] || []}
   selectedFriend={selectedFriend}
+  onDeleteMessage={handleDeleteMessage}
 />
+
             </div>
             <div className="s-input-area">
               <ChatInput newMessage={newMessage} onChange={setNewMessage} onSend={handleSendMessage} />

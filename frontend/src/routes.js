@@ -38,6 +38,7 @@ import QuestionGenerator from './pages/qngen.js';
 import ResumeCourse from './pages/resumecourse.js';
 import Ctdch from './pages/ctdch.js';
 import QuizTest from './pages/quiztest.js';
+import QuizChallenge from './pages/QuizChallenge.js';
 import Social from './chats/Social.js'
 const AppRoutes = () => {
   return (
@@ -60,6 +61,7 @@ const AppRoutes = () => {
       <Route path="/tdch" element={<Tdch />} />
       <Route path="/courses" element={<Courses />} />
       <Route path="/courses/:courseId" element={<CourseDetail />} />
+      <Route path="/quiz/:id" element={<QuizChallenge />} /> // For specific quiz challenge
 
       <Route path="/html" element={<HTML />} />
       <Route path="/math" element={<Math/>} />
