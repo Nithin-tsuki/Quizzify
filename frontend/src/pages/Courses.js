@@ -156,9 +156,17 @@ const Courses = () => {
       navigate('/login');
       return;
     }
-    setSelectedCourse(course);
-    setShowModal(true);
+  
+    const isEnrolled = course.students.includes(studentId);
+  
+    if (isEnrolled) {
+      navigate(`/courses/${course._id}`);
+    } else {
+      setSelectedCourse(course);
+      setShowModal(true);
+    }
   };
+  
 
   const confirmJoin = async () => {
     try {

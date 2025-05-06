@@ -208,7 +208,6 @@
 // };
 
 // export default CourseDetail;
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -217,8 +216,10 @@ import "../styles/CourseDetail.css";
 const CourseDetail = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
-  const [activeTopic, setActiveTopic] = useState(null); // Track active topic
-  const [completedTopics, setCompletedTopics] = useState({}); // Track completion status
+  const [activeTopic, setActiveTopic] = useState(null);
+  const [completedTopics, setCompletedTopics] = useState({});
+  const user = localStorage.getItem('user');
+  const studentId = user ? JSON.parse(user).userid : null;
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -226,19 +227,43 @@ const CourseDetail = () => {
       const found = res.data.find((c) => c._id === courseId);
       setCourse(found);
     };
+
+    const fetchProgress = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5001/api/progress/${studentId}/${courseId}`);
+        const progMap = {};
+        res.data.lessons.forEach((lesson) => {
+          progMap[lesson.dayIndex] = lesson.completed;
+        });
+        setCompletedTopics(progMap);
+      } catch (err) {
+        console.error("Failed to load progress", err);
+      }
+    };
+
     fetchCourse();
-  }, [courseId]);
+    if (studentId && courseId) fetchProgress();
+  }, [courseId, studentId]);
 
-  const handleTopicClick = (topic) => {
-    setActiveTopic(activeTopic === topic ? null : topic); // Toggle active topic
-  };
+  const handleCheckboxChange = async (event, topic, idx) => {
+    event.stopPropagation();
 
-  const handleCheckboxChange = (event, topic) => {
-    event.stopPropagation(); // Prevent topic box from opening when checkbox is clicked
-    setCompletedTopics((prevState) => ({
-      ...prevState,
-      [topic.title]: !prevState[topic.title], // Toggle completion status for the topic
+    const newStatus = !completedTopics[idx];
+    setCompletedTopics((prev) => ({
+      ...prev,
+      [idx]: newStatus,
     }));
+
+    try {
+      await axios.post('http://localhost:5001/api/progress/updatecourse', {
+        studentId,
+        challengeId: courseId,
+        topicIndex: idx,
+        completed: newStatus,
+      });
+    } catch (err) {
+      console.error("Failed to update progress", err);
+    }
   };
 
   if (!course) return <div>Loading...</div>;
@@ -252,20 +277,16 @@ const CourseDetail = () => {
         <ul className="cd-topic-list">
           {course.topics.map((topic, idx) => (
             <li key={idx}>
-              <div
-                className="cd-topic-box"
-                onClick={() => handleTopicClick(topic)} // Make the entire div clickable
-              >
+              <div className="cd-topic-box" onClick={() => setActiveTopic(activeTopic === topic ? null : topic)}>
                 <div className="cd-topic-header">
                   <span className="cd-topic-title">
                     {activeTopic === topic ? "▼" : "➤"} {topic.title}
                   </span>
                   <input
                     type="checkbox"
-                    checked={completedTopics[topic.title] || false} // Set checked status based on completion state
-                    onChange={(event) => handleCheckboxChange(event, topic)
-                    } // Handle checkbox click
-                    onClick={(e)=>e.stopPropagation()}
+                    checked={completedTopics[idx] || false}
+                    onChange={(e) => handleCheckboxChange(e, topic, idx)}
+                    onClick={(e) => e.stopPropagation()}
                     className="cd-checkbox"
                   />
                 </div>

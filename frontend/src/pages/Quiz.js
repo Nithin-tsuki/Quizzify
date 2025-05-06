@@ -246,7 +246,7 @@ const Quiz = () => {
 
   const handleTestClick = (test) => {
     setSelectedTest(test);
-    setQuestions(test.questions || []);
+    setQuestions(test.questionText || []);
     setCurrentQuestionIndex(0);
     setScore(0);
     setQuizFinished(false);
@@ -335,7 +335,7 @@ const Quiz = () => {
           {!quizFinished ? (
             <>
               <h2>{selectedTest.description}</h2>
-              <p className="question">{questions[currentQuestionIndex]?.question}</p>
+              <p className="question">{questions[currentQuestionIndex]?.questionText}</p>
               <div className="options">
                 {questions[currentQuestionIndex]?.options.map((option, index) => (
                   <button
@@ -354,7 +354,6 @@ const Quiz = () => {
               <p className="score">
                 Your Score: {score} / {questions.length}
               </p>
-              <Link to="/quiz-test" className="start-test-link">Start New Test</Link> {/* Added Link */}
               <button
                 onClick={() => setSelectedTest(null)}
                 className="back-btn"

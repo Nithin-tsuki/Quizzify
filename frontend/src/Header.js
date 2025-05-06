@@ -298,25 +298,37 @@ const Header = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     return user?.role || null;
   });
+  useEffect(() => {
+    const updateUser = () => {
+      const updatedUser = JSON.parse(localStorage.getItem("user"));
+      setRole(updatedUser?.role || null);
+      setXp(updatedUser?.points || 0);
+    };
+  
+    window.addEventListener("userUpdated", updateUser);
+    return () => window.removeEventListener("userUpdated", updateUser);
+  }, []);
+  
+  
 
   const [xp, setXp] = useState(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    return user?.xp || 0;
+    return user?.points || 0;
   });
-
-  const navigate = useNavigate();
-
   useEffect(() => {
     const interval = setInterval(() => {
       const user = JSON.parse(localStorage.getItem('user'));
       const currentRole = user?.role || null;
-      const currentXp = user?.xp || 0;
+      const currentXp = user?.points || 0;
       if (currentRole !== role) setRole(currentRole);
       if (currentXp !== xp) setXp(currentXp);
     }, 500);
-
+  
     return () => clearInterval(interval);
   }, [role, xp]);
+  
+  const navigate = useNavigate();
+
 
   const handleProtectedNavigation = (e, path) => {
     if (!role) {

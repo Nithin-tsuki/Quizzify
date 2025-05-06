@@ -15,14 +15,15 @@ const fetchProgress = async (userId, challengeId) => {
   return res.json();
 };
 
-const toggleProgress = async (userId, challengeId, day) => {
-  const res = await fetch(`${API_BASE}/progress/toggle`, {
+const toggleProgress = async (studentId, challengeId, dayIndex) => {
+  const res = await fetch(`${API_BASE}/progress/update`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, challengeId, day }),
+    body: JSON.stringify({ studentId, challengeId, dayIndex }),
   });
   return res.json();
 };
+
 
 const ChallengeTracker = () => {
   const navigate = useNavigate();
@@ -35,7 +36,51 @@ const ChallengeTracker = () => {
   const [showCourseConfirmation, setShowCourseConfirmation] = useState(false);
   const [currentCourseIndex, setCurrentCourseIndex] = useState(null);
   const [selectedLesson, setSelectedLesson] = useState(null);
-
+  useEffect(() => {
+    const loadCoursesWithProgress = async () => {
+      try {
+        const challenges = await fetchChallenges();
+  
+        if (!Array.isArray(challenges)) {
+          console.error("Invalid challenge data:", challenges);
+          return;
+        }
+  
+        const updatedCourses = await Promise.all(
+          challenges.map(async (challenge) => {
+            const lessons = challenge.days.map((day) => ({
+              completed: false,
+              videoUrl: day.videoUrl || "#",
+              notes: day.notesUrl || "#",
+              title: `Day ${day.day}: ${day.title}`,
+            }));
+  
+            const progressData = await fetchProgress(userId, challenge._id);
+            const completedLessons = new Set(progressData?.completedLessons || []);
+  
+            const lessonsWithProgress = lessons.map((lesson, i) => ({
+              ...lesson,
+              completed: completedLessons.has(i + 1),
+            }));
+  
+            return {
+              id: challenge._id,
+              name: challenge.subject,
+              instructor: challenge.instructorId,
+              lessons: lessonsWithProgress,
+            };
+          })
+        );
+  
+        setCourseData(updatedCourses);
+      } catch (error) {
+        console.error('Error loading courses or progress:', error);
+      }
+    };
+  
+    if (userId) loadCoursesWithProgress();
+  }, [userId]);
+  
   useEffect(() => {
     const loadCourses = async () => {
       try {
@@ -92,33 +137,47 @@ const ChallengeTracker = () => {
       100
     : 0;
 
-  const handleCourseClick = (index) => {
-    if (!role) {
-      navigate('/login');
-    } else {
-      setCurrentCourseIndex(index);
-      setShowCourseConfirmation(true);
-    }
-  };
+    const handleCourseClick = (index) => {
+      if (!role) {
+        navigate('/login');
+        return;
+      }
+    
+      const course = courseData[index];
+      const hasProgress = course.lessons.some((lesson) => lesson.completed);
+    
+      if (hasProgress) {
+        setSelectedCourse(index);
+      } else {
+        setCurrentCourseIndex(index);
+        setShowCourseConfirmation(true);
+      }
+    };
+    
 
-  const handleConfirmAccess = async () => {
-    const course = courseData[currentCourseIndex];
+  // const handleConfirmAccess = async () => {
+  //   const course = courseData[currentCourseIndex];
 
-    const progressData = await fetchProgress(userId, course.id);
-    const completedLessons = new Set(progressData?.completedLessons || []);
+  //   const progressData = await fetchProgress(userId, course.id);
+  //   const completedLessons = new Set(progressData?.completedLessons || []);
 
-    const updatedLessons = course.lessons.map((lesson, i) => ({
-      ...lesson,
-      completed: completedLessons.has(i + 1),
-    }));
+  //   const updatedLessons = course.lessons.map((lesson, i) => ({
+  //     ...lesson,
+  //     completed: completedLessons.has(i + 1),
+  //   }));
 
-    const updatedCourses = [...courseData];
-    updatedCourses[currentCourseIndex].lessons = updatedLessons;
+  //   const updatedCourses = [...courseData];
+  //   updatedCourses[currentCourseIndex].lessons = updatedLessons;
 
-    setCourseData(updatedCourses);
+  //   setCourseData(updatedCourses);
+  //   setSelectedCourse(currentCourseIndex);
+  //   setShowCourseConfirmation(false);
+  // };
+  const handleConfirmAccess = () => {
     setSelectedCourse(currentCourseIndex);
     setShowCourseConfirmation(false);
   };
+  
 
   const handleDayClick = (lesson) => {
     setSelectedLesson(lesson);
