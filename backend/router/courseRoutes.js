@@ -33,7 +33,7 @@ import express from 'express';
 import { createCourse, getCourses,createTopic,getTopicsForCourse,getAllCourses,enrollInCourse,getStudentCourses,getStudentList } from '../controllers/courseController.js';
 import upload from '../middlewares/upload.js';
 import { get } from 'mongoose';
-
+import Course from '../models/course.js';
 const router = express.Router();
 
 router.post('/create', createCourse);
@@ -54,6 +54,17 @@ router.get('/', getAllCourses);
 router.post('/enroll/:courseId', enrollInCourse);
 router.get('/my-courses/:studentId', getStudentCourses);
 router.get('/students', getStudentList);
+
+// GET /api/courses/student/:studentId
+router.get('/student/:studentId', async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const courses = await Course.find({ students: studentId });
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
 
 export default router;
 

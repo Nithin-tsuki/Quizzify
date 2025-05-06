@@ -11,4 +11,5 @@ const studentProgressSchema = new mongoose.Schema({
   lessons: [lessonProgressSchema]
 });
 
-export const StudentProgress = mongoose.model('StudentProgress', studentProgressSchema);
+const StudentProgress = mongoose.model('StudentProgress', studentProgressSchema);
+export default StudentProgress;

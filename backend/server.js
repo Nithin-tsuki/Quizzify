@@ -12,7 +12,7 @@ import quizRoutes from './router/quizRoutes.js';
 import challengeRoutes from './router/challengeRoutes.js';
 import progressRoutes from './router/progressRoutes.js';
 import quizgetRoutes from './router/quizzes.js';
-
+import Student from './models/student.js'; // Import the Student model
 import QuizChallengeRoutes from './router/quizChallengeRoutes.js';
 
 dotenv.config();
@@ -55,29 +55,71 @@ app.use('/quizzes', quizgetRoutes);
 app.get('/', (req, res) => {
   res.send('Hello World with MongoDB connected!');
 });
+let leaderboard = [];
 
-// Socket.IO logic
 io.on("connection", (socket) => {
   console.log("🔌 A user connected:", socket.id);
 
+  // Room join for chat
   socket.on("joinRoom", ({ sender, receiver }) => {
     const roomId = getRoomId(sender, receiver);
     socket.join(roomId);
     console.log(`👥 ${sender} joined room: ${roomId}`);
   });
 
+  // Message handling
   socket.on("sendMessage", (messageData) => {
     const roomId = getRoomId(messageData.senderId, messageData.receiverId);
     io.to(roomId).emit("newMessage", messageData);
     console.log("📤 Broadcasted message to room:", roomId);
   });
 
+  // 🧠 Handle quiz submission
+  
+  socket.on('submit_score', async ({ name, score }) => {
+    try {
+      const student = await Student.findOne({ username: name });
+      if (student) {
+        student.points += score;
+        await student.save();
+
+        // Update leaderboard in memory or from DB again
+        leaderboard = await Student.find({ points: { $gt: 0 } })
+          .sort({ points: -1 })
+          .limit(10)
+          .select('username points -_id');
+
+        io.emit('update_leaderboard', leaderboard);
+      }
+    } catch (err) {
+      console.error('Error updating score:', err);
+    }
+  });
+  socket.on("update_score_live", ({ name, score }) => {
+    // Find if user already exists in in-memory leaderboard
+    const existing = leaderboard.find((entry) => entry.username === name);
+  
+    if (existing) {
+      existing.points = score;
+    } else {
+      leaderboard.push({ username: name, points: score });
+    }
+  
+    // Sort and limit leaderboard to top 10
+    leaderboard.sort((a, b) => b.points - a.points);
+    leaderboard = leaderboard.slice(0, 10);
+  
+    io.emit("update_leaderboard", leaderboard);
+  });
+
+  socket.emit('update_leaderboard', leaderboard);
+
   socket.on("disconnect", () => {
     console.log("❌ A user disconnected:", socket.id);
   });
 });
 
-// Utility to create consistent room ID
+// Room ID utility
 function getRoomId(user1, user2) {
   return [user1, user2].sort().join("_");
 }
