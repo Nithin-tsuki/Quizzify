@@ -32,7 +32,7 @@
 // export  {createUser,loginUser};
 
 import Student from '../models/student.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import createToken from "../utils/createToken.js";
 import teacher from '../models/teacher.js';
 const createUser = async (req, res) => {

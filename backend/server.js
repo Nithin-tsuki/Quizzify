@@ -50,8 +50,6 @@ app.use('/api/challenges', challengeRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/quizchallenges', QuizChallengeRoutes);
 app.use('/quizzes', quizgetRoutes);
-
-
 app.get('/', (req, res) => {
   res.send('Hello World with MongoDB connected!');
 });

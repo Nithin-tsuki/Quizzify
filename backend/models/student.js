@@ -64,8 +64,11 @@ const studentSchema = new mongoose.Schema({
     quizAttended: {
         type: Number,
         default: 0
-    }
-}, { timestamps: true });
-
+    },
+    quizzesAttempted: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Quiz'
+    }]
+});    
 const Student = mongoose.model('Student', studentSchema);
 export default Student;
