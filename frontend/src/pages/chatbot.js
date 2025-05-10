@@ -143,7 +143,7 @@ const ChatBot = () => {
       text: "Hello! I'm Nithin, your AI Agent here to help with your studies. How may I assist you today?",
     },
   ]);
-  const API_KEY=process.env.API_KEY;
+  const API_KEY=process.env.REACT_APP_API_KEY;
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -175,8 +175,8 @@ const ChatBot = () => {
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          // Authorization: `Bearer ${API_KEY}`, // Replace with your actual API key
-          Authorization: `Bearer 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`, // Replace with your actual API key
+          Authorization: `Bearer ${API_KEY}`, // Replace with your actual API key
+          // Authorization: `Bearer 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`, // Replace with your actual API key
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
