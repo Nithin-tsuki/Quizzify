@@ -30,7 +30,7 @@
 
 // export default router;
 import express from 'express';
-import { createCourse, getCourses,createTopic,getTopicsForCourse,getAllCourses,enrollInCourse,getStudentCourses,getStudentList } from '../controllers/courseController.js';
+import { createCourse, getCourses,createTopic,getTopicsForCourse,getAllCourses,enrollInCourse,getStudentCourses,getStudentList,getTeacherCourses} from '../controllers/courseController.js';
 import upload from '../middlewares/upload.js';
 import { get } from 'mongoose';
 import Course from '../models/course.js';
@@ -47,8 +47,7 @@ router.post(
     createTopic
   );
 router.get('/topics', getTopicsForCourse);
-
-
+router.get('/teacher/:id', getTeacherCourses);
   
 router.get('/', getAllCourses);
 router.post('/enroll/:courseId', enrollInCourse);

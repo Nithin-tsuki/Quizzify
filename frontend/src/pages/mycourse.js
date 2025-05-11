@@ -467,13 +467,14 @@ const MyCourse = () => {
   useEffect(() => {
     fetchCourses();
   }, []);
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/courses/all');
+      const res = await axios.get(`http://localhost:5001/api/courses/teacher/${user.userid}`);
       const uniqueCourses = Array.from(
         new Map(res.data.map((item) => [item.courseName + item.instructorName, item])).values()
-      );
+      ); 
       setCourses(uniqueCourses);
     } catch (err) {
       console.error('Error fetching courses:', err);
@@ -481,7 +482,6 @@ const MyCourse = () => {
   };
 
   const handleCourseClick = async (course) => {
-    const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.username) return;
   
     try {

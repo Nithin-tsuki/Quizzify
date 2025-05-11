@@ -149,3 +149,17 @@
 .question-item:hover {
   background-color: #f1f1f1;
 }
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+  flex-wrap: wrap;
+}
+
+.number-input {
+  flex: 1;
+  min-width: 120px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

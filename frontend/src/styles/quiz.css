@@ -284,7 +284,7 @@
 }
 
 /* Leaderboard */
-.leaderboard-toggle {
+.liveleaderboard-toggle {
   background-color: #bbdefb;
   color: #0d47a1;
   border: none;
@@ -296,24 +296,24 @@
   float: right;
 }
 
-.leaderboard {
+.liveleaderboard {
   background-color: #e3f2fd;
   padding: 1rem;
   border-radius: 12px;
   margin-bottom: 2rem;
 }
 
-.leaderboard h3 {
+.liveleaderboard h3 {
   color: #1565c0;
   margin-bottom: 1rem;
 }
 
-.leaderboard ul {
+.liveleaderboard ul {
   list-style-type: none;
   padding: 0;
 }
 
-.leaderboard li {
+.liveleaderboard li {
   padding: 0.5rem 0;
   font-weight: 500;
   color: #0d47a1;

@@ -175,7 +175,7 @@ const ChatBot = () => {
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${API_KEY}`, // Replace with your actual API key
+          Authorization: `Bearer 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`, // Replace with your actual API key
           // Authorization: `Bearer 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`, // Replace with your actual API key
           'Content-Type': 'application/json',
         },

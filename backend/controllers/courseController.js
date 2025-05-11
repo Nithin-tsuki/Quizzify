@@ -207,6 +207,19 @@ export const createTopic = async (req, res) => {
 export const getCourses = async (req, res) => {
   try {
     const courses = await Course.find();
+    console.log(req);
+    console.log("hello");
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+export const getTeacherCourses = async (req, res) => {
+  try {
+    const instructorId = req.params.id;
+
+    const courses = await Course.find({ instructorId });
+
     res.status(200).json(courses);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
