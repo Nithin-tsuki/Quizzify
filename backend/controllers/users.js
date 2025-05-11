@@ -114,7 +114,8 @@ const loginUser = async (req, res) => {
       username: user.username,
       role: user.role,
       fullName: user.fullName,
-      points: user.points
+      points: user.points,
+      email: user.email
     });
   } catch (error) {
     console.error("Login error:", error);

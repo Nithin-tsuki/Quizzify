@@ -3,6 +3,7 @@ import http from 'http';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import multer from 'multer';
 import { Server } from 'socket.io'; // Named import
 import userRoutes from './router/userRouter.js';
 import courseRoutes from './router/courseRoutes.js';
@@ -14,11 +15,17 @@ import progressRoutes from './router/progressRoutes.js';
 import quizgetRoutes from './router/quizzes.js';
 import Student from './models/student.js'; // Import the Student model
 import QuizChallengeRoutes from './router/quizChallengeRoutes.js';
+import { spawn } from "child_process";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-dotenv.config();
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const app = express();
 const server = http.createServer(app);
+dotenv.config();
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000", // your frontend
@@ -30,6 +37,7 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
+const upload = multer({ dest: "uploads/" });
 // MongoDB connection
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.zauvqnf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
@@ -39,6 +47,48 @@ mongoose.connect(mongoURI, {
 })
 .then(() => console.log('✅ Connected to MongoDB'))
 .catch((err) => console.error('❌ MongoDB connection error:', err));
+
+app.post("/generate-questions", upload.single("file"), (req, res) => {
+  const { start_page, end_page, num_questions } = req.body;
+  console.log("Received data:", req.body);
+  const pdfPath = req.file.path;
+  console.log("PDF Path:", pdfPath);
+  const pythonProcess = spawn("python", [
+    path.join(__dirname, "question_gen.py"),
+    pdfPath,
+    start_page,
+    end_page,
+    num_questions,
+  ]);
+
+  let result = "";
+
+  pythonProcess.stdout.on("data", (data) => {
+    result += data.toString();
+  });
+
+  pythonProcess.stderr.on("data", (data) => {
+    console.error("Python error:", data.toString());
+  });
+
+  pythonProcess.on("close", (code) => {
+    fs.unlink(pdfPath, () => {}); // Clean up uploaded PDF
+
+    try {
+      const output = JSON.parse(result);
+      if (output.questions) {
+        res.json({ questions: output.questions });
+      } else {
+        res.status(500).json({ error: output.error || "Failed to generate questions." });
+      }
+    } catch (err) {
+      console.error("Parse error:", err);
+      res.status(500).json({ error: "Invalid response from Python script." });
+    }
+  });
+});
+
+
 
 // Routes
 app.use("/api/users", userRoutes);
@@ -74,6 +124,10 @@ io.on("connection", (socket) => {
 
   // 🧠 Handle quiz submission
   
+
+  // Multer config for PDF uploads
+
+
   socket.on('submit_score', async ({ name, score }) => {
     try {
       const student = await Student.findOne({ username: name });

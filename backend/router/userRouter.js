@@ -10,7 +10,7 @@ router.route('/logout').post(logoutUser);
 
 router.get('/leaderboard', async (req, res) => {
   try {
-    const students = await User.find().sort({ points: -1 }).select('fullName username email points');
+    const students = await Student.find().sort({ points: -1 }).select('fullName username email points');
     res.json(students);
   } catch (error) {
     console.error('Error fetching leaderboard data:', error);

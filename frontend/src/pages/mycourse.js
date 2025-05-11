@@ -647,16 +647,32 @@ const MyCourse = () => {
               <p>No topics added yet.</p>
             )}
           </ul>
-          <h3>Enrolled Students:</h3>
-<ul className="students-list">
-  {selectedCourse.students && selectedCourse.students.length > 0 ? (
-    selectedCourse.students.map((student, idx) => (
-      <li key={idx}>{student.username} ({student.email})</li>
-    ))
-  ) : (
-    <p>No students enrolled yet.</p>
-  )}
-</ul>
+         <h3>Enrolled Students:</h3>
+{selectedCourse.students && selectedCourse.students.length > 0 ? (
+  <table className="students-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Points</th>
+        <th>Quizzes Attended</th>
+      </tr>
+    </thead>
+    <tbody>
+      {selectedCourse.students.map((student, idx) => (
+        <tr key={idx}>
+          <td>{student.username}</td>
+          <td>{student.email}</td>
+          <td>{student.points ?? 0}</td>
+          <td>{student.quizAttended ?? 0}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+) : (
+  <p>No students enrolled yet.</p>
+)}
+  
 
           <button className="download-btn" onClick={downloadExcel}>
             Download Student Report (Excel)

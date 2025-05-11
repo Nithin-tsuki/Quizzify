@@ -152,7 +152,7 @@
       setError("");
 
       try {
-        const response = await fetch("http://localhost:5000/generate-questions", {
+        const response = await fetch("http://localhost:5001/generate-questions", {
           method: "POST",
           body: formData,
         });

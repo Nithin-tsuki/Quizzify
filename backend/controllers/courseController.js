@@ -290,15 +290,14 @@ export const getStudentCourses = async (req, res) => {
 };
 export const getStudentList = async (req, res) => {
   const { courseName, instructorName } = req.query;
-  console.log(req.query); // Debug log
+
   try {
     const course = await Course.findOne({ courseName, instructorName }).populate({
       path: 'students',
-      select: 'name email -_id'
+      select: 'username email points quizAttended -_id' // Include all required fields
     });
 
     if (!course) {
-      console.log('Course not found for:', courseName, instructorName);
       return res.status(404).json({ error: 'Course not found' });
     }
 
@@ -308,4 +307,5 @@ export const getStudentList = async (req, res) => {
     res.status(500).json({ error: 'Failed to get students' });
   }
 };
+
 

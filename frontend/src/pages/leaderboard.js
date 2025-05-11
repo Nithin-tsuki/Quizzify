@@ -46,17 +46,18 @@
 // };
 
 // export default Leaderboard;
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/leaderboard.css";
 
 const Leaderboard = () => {
-  const [students, setStudents] = useState([]);
+ const [students, setStudents] = useState([]);
+const user = JSON.parse(localStorage.getItem("user"));
+const currentUsername = user?.username;
+console.log(currentUsername);
 
   useEffect(() => {
-    // Fetch leaderboard data (students sorted by points)
-    axios.get('/api/users/leaderboard')
+    axios.get('http://localhost:5001/api/users/leaderboard')
       .then(response => {
         setStudents(response.data);
       })
@@ -64,7 +65,7 @@ const Leaderboard = () => {
         console.error("Error fetching leaderboard data:", error);
       });
   }, []);
-console.log(students);
+
   return (
     <div className="leaderboard">
       <h2>Leaderboard</h2>
@@ -77,7 +78,10 @@ console.log(students);
           <div className="header-item">Points</div>
         </div>
         {students.map((student, index) => (
-          <div className="leaderboard-row" key={student._id}>
+          <div
+            className={`leaderboard-row ${student.username === currentUsername ? 'highlight-row' : ''}`}
+            key={student._id}
+          >
             <div className="row-item">{index + 1}</div>
             <div className="row-item">{student.fullName}</div>
             <div className="row-item">{student.username}</div>

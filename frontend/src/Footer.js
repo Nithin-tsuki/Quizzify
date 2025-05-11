@@ -110,7 +110,14 @@ import ChatBot from './pages/chatbot.js';
 const Footer = () => {
   const user = localStorage.getItem("user");
   const parsedUser = user ? JSON.parse(user) : null;
-  const [role, setRole] = useState(parsedUser?.role || "student"); // default to student
+  // const [role, setRole] = useState(parsedUser?.role || "student"); // default to student
+  const [role, setRole] = useState("student"); // default to student
+
+useEffect(() => {
+  const user = localStorage.getItem("user");
+  const parsedUser = user ? JSON.parse(user) : null;
+  setRole(parsedUser?.role || "student");
+}, []);
 
   const renderFooterLinks = () => (
     <>

@@ -214,7 +214,7 @@ const Quiz = () => {
   const { id } = useParams();
   const location = useLocation();
   const isChallenge = new URLSearchParams(location.search).get("challenged") === "true";
-
+  
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [tests, setTests] = useState([]);
@@ -227,8 +227,22 @@ const Quiz = () => {
   const [quizFinished, setQuizFinished] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(true);
 
-  const user = localStorage.getItem("user");
-  const studentId = user ? JSON.parse(user).userid : null;
+const [user, setUser] = useState(null);
+
+useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+
+  if (storedUser) {
+    try {
+      const parsedUser = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
+      setUser(parsedUser);
+    } catch (error) {
+      console.error("Error parsing user from localStorage:", error);
+    }
+  }
+}, []);
+
+  const studentId = user ? user.userid : null;
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -278,22 +292,33 @@ const Quiz = () => {
   }, []);
 
   const handleSubjectClick = async (subject) => {
-    setSelectedSubject(subject);
-    setLoading(true);
-    try {
-      const response = await fetch(`http://localhost:5001/quiz/exam`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subjectName: subject.toLowerCase() }),
-      });
-      const data = await response.json();
-      setTests(response.ok ? data.tests || [] : []);
-    } catch (error) {
-      console.error("Error fetching tests:", error);
+  setSelectedSubject(subject);
+  setLoading(true);
+  try {
+    const response = await fetch(`http://localhost:5001/quiz/exam`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subjectName: subject.toLowerCase(),
+        username: user?.username, // optional chaining for safety
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setTests(data.tests || []);
+    } else {
+      console.error("Server responded with error:", data.error || data.message);
       setTests([]);
     }
-    setLoading(false);
-  };
+  } catch (error) {
+    console.error("Error fetching tests:", error);
+    setTests([]);
+  }
+  setLoading(false);
+};
+
 
   const handleTestClick = (test) => {
     setSelectedTest(test);
@@ -320,6 +345,10 @@ const Quiz = () => {
       setQuizFinished(true);
       socket.emit("submit_score", { name: user.username, score: newScore });
     }
+const existingPoints = user.points || 0;
+const updatedUser = { ...user, points: existingPoints + newScore };
+localStorage.setItem("user", JSON.stringify(updatedUser));
+window.dispatchEvent(new Event("userUpdated"));
   };
 
   return (

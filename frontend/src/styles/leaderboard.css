@@ -121,4 +121,7 @@
       text-align: left;
     }
   }
-  
+  .highlight-row {
+  background-color: #d1e7dd !important; /* soft green */
+  font-weight: bold;
+}

@@ -137,8 +137,20 @@ router.post("/saveQuiz", async (req, res) => {
 // POST: Get quizzes by subject
 router.post("/exam", async (req, res) => {
   try {
-    const { subjectName } = req.body;
-    if (!subjectName) return res.status(400).json({ error: "Subject is required" });
+    const { subjectName, username } = req.body;
+    console.log("Received data:", req.body);
+    if (!subjectName) {
+      return res.status(400).json({ error: "Subject is required" });
+    }
+
+    // Increment quizzesAttended for the student
+    if (username) {
+      await Student.findOneAndUpdate(
+        { username },                 // Assuming 'username' is a unique field in Student
+        { $inc: { quizAttended: 1 } },
+        { new: true }
+      );
+    }
 
     const quizzes = await Quiz.find({ subjectName });
 
@@ -152,6 +164,7 @@ router.post("/exam", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 // GET: Get all quizzes
 router.get("/", async (req, res) => {

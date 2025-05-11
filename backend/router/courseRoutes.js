@@ -58,6 +58,7 @@ router.get('/students', getStudentList);
 router.get('/student/:studentId', async (req, res) => {
   try {
     const { studentId } = req.params;
+    console.log('Fetching courses for student:', studentId);
     const courses = await Course.find({ students: studentId });
     res.json(courses);
   } catch (err) {
