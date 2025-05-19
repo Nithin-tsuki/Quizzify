@@ -85,7 +85,7 @@ import express from "express";
 import Quiz from "../models/quiz.js";
 import QuizChallenge from "../models/quizChallenge.js";
 import Student from "../models/student.js";
-
+import { submitQuiz } from "../controllers/quizController.js";
 const router = express.Router();
 
 // POST: Save a new quiz
@@ -202,29 +202,31 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST: Submit a quiz
-router.post("/submit", async (req, res) => {
-  try {
-    const { userId, quizId, answers } = req.body;
+// router.post("/submit", async (req, res) => {
+//   try {
+//     const { userId, quizId, answers } = req.body;
 
-    const student = await Student.findById(userId);
-    if (!student) return res.status(404).json({ message: "Student not found" });
+//     const student = await Student.findById(userId);
+//     if (!student) return res.status(404).json({ message: "Student not found" });
 
-    if (student.quizzesAttempted.includes(quizId)) {
-      return res.status(403).json({ message: "You have already submitted this quiz" });
-    }
+//     if (student.quizzesAttempted.includes(quizId)) {
+//       return res.status(403).json({ message: "You have already submitted this quiz" });
+//     }
 
-    // TODO: Add grading logic using `answers` and `Quiz.findById(quizId)`
+//     // TODO: Add grading logic using `answers` and `Quiz.findById(quizId)`
 
-    await Student.findByIdAndUpdate(userId, {
-      $addToSet: { quizzesAttempted: quizId },
-      $inc: { quizAttended: 1 },
-    });
+//     await Student.findByIdAndUpdate(userId, {
+//       $addToSet: { quizzesAttempted: quizId },
+//       $inc: { quizAttended: 1 },
+//     });
 
-    res.status(200).json({ message: "Quiz submitted successfully" });
-  } catch (error) {
-    console.error("Error submitting quiz:", error);
-    res.status(500).json({ message: "Server error while submitting quiz" });
-  }
-});
+//     res.status(200).json({ message: "Quiz submitted successfully" });
+//   } catch (error) {
+//     console.error("Error submitting quiz:", error);
+//     res.status(500).json({ message: "Server error while submitting quiz" });
+//   }
+// });
+
+router.post('/submit-quiz', submitQuiz);
 
 export default router;

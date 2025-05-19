@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import multer from 'multer';
-import { Server } from 'socket.io'; // Named import
+import { Server } from 'socket.io';
 import userRoutes from './router/userRouter.js';
 import courseRoutes from './router/courseRoutes.js';
 import chatRoutes from './router/chatRoutes.js';
@@ -13,7 +13,7 @@ import quizRoutes from './router/quizRoutes.js';
 import challengeRoutes from './router/challengeRoutes.js';
 import progressRoutes from './router/progressRoutes.js';
 import quizgetRoutes from './router/quizzes.js';
-import Student from './models/student.js'; // Import the Student model
+import Student from './models/student.js';
 import QuizChallengeRoutes from './router/quizChallengeRoutes.js';
 import { spawn } from "child_process";
 import path from "path";
@@ -28,18 +28,17 @@ const server = http.createServer(app);
 dotenv.config();
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // your frontend
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
 const upload = multer({ dest: "uploads/" });
-// MongoDB connection
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.zauvqnf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+// const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.d19uias.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
@@ -53,7 +52,7 @@ app.post("/generate-questions", upload.single("file"), (req, res) => {
   console.log("Received data:", req.body);
   const pdfPath = req.file.path;
   console.log("PDF Path:", pdfPath);
-  const pythonProcess = spawn("python", [
+  const pythonProcess = spawn("python3", [
     path.join(__dirname, "question_gen.py"),
     pdfPath,
     start_page,
@@ -72,7 +71,7 @@ app.post("/generate-questions", upload.single("file"), (req, res) => {
   });
 
   pythonProcess.on("close", (code) => {
-    fs.unlink(pdfPath, () => {}); // Clean up uploaded PDF
+    fs.unlink(pdfPath, () => {});
 
     try {
       const output = JSON.parse(result);
@@ -88,9 +87,6 @@ app.post("/generate-questions", upload.single("file"), (req, res) => {
   });
 });
 
-
-
-// Routes
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/chat", chatRoutes);
@@ -107,25 +103,16 @@ let leaderboard = [];
 
 io.on("connection", (socket) => {
   console.log("🔌 A user connected:", socket.id);
-
-  // Room join for chat
   socket.on("joinRoom", ({ sender, receiver }) => {
     const roomId = getRoomId(sender, receiver);
     socket.join(roomId);
     console.log(`👥 ${sender} joined room: ${roomId}`);
   });
-
-  // Message handling
   socket.on("sendMessage", (messageData) => {
     const roomId = getRoomId(messageData.senderId, messageData.receiverId);
     io.to(roomId).emit("newMessage", messageData);
     console.log("📤 Broadcasted message to room:", roomId);
   });
-
-  // 🧠 Handle quiz submission
-  
-
-  // Multer config for PDF uploads
 
 
   socket.on('submit_score', async ({ name, score }) => {
@@ -134,8 +121,6 @@ io.on("connection", (socket) => {
       if (student) {
         student.points += score;
         await student.save();
-
-        // Update leaderboard in memory or from DB again
         leaderboard = await Student.find({ points: { $gt: 0 } })
           .sort({ points: -1 })
           .limit(10)

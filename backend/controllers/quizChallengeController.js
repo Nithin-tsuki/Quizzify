@@ -2,16 +2,78 @@ import QChallenge from '../models/quizChallenge.js';
 import Student from '../models/student.js';
 import Quiz from '../models/quiz.js';
 
+// export const sendChallenge = async (req, res) => {
+//   const { senderId, receiverId, quizId, status } = req.body;
+//     console.log(senderId, receiverId, quizId, status);
+//   try {
+//     const challenge = await QChallenge.create({
+//       senderId,
+//       receiverId,
+//       quizId,
+//       status
+//     });
+//     res.status(201).json(challenge);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to create challenge' });
+//   }
+// };
+
+// export const sendChallenge = async (req, res) => {
+//   const { senderId, receiverId, quizId, status } = req.body;
+//   console.log(senderId, receiverId, quizId, status);
+
+//   try {
+//     // Check if a pending challenge already exists between the same users
+//     const existingChallenge = await QChallenge.findOne({
+//       senderId,
+//       receiverId,
+//       quizId,
+//       status: "Pending"
+//     });
+
+//     if (existingChallenge) {
+//       return res.status(400).json({
+//         error: "Challenge already sent to this user and is still pending."
+//       });
+//     }
+
+//     const challenge = await QChallenge.create({
+//       senderId,
+//       receiverId,
+//       quizId,
+//       status
+//     });
+
+//     res.status(201).json(challenge);
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to create challenge" });
+//   }
+// };
+
+
+
 export const sendChallenge = async (req, res) => {
   const { senderId, receiverId, quizId, status } = req.body;
-    console.log(senderId, receiverId, quizId, status);
+
   try {
+    // Check for existing pending challenge between sender and receiver
+    const existingChallenge = await QChallenge.findOne({
+      senderId,
+      receiverId,
+      status: 'Pending'
+    });
+
+    if (existingChallenge) {
+      return res.status(400).json({ error: 'A pending challenge already exists between these users.' });
+    }
+
     const challenge = await QChallenge.create({
       senderId,
       receiverId,
       quizId,
       status
     });
+
     res.status(201).json(challenge);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create challenge' });

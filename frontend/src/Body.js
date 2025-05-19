@@ -134,7 +134,7 @@ const Body = () => {
             <div className="card">
               <h3>View Reports</h3>
               <p>Get detailed insights on student progress, strengths, and gaps.</p>
-              <Link to="/report" className="btn2">View Reports</Link>
+              <Link to="/leaderboard" className="btn2">View Reports</Link>
             </div>
             <div className="card">
               <h3>Create a Thirty-Day Challenge</h3>

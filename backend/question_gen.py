@@ -1,13 +1,12 @@
-import fitz  # PyMuPDF
+import fitz 
 import sys
 import json
 import requests
 import io
 
-# Force UTF-8 encoding for stdout
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-GROQ_API_KEY = ""
+GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL_NAME = "llama3-8b-8192"
 

@@ -133,13 +133,13 @@
   background-color: #f4f4f4;
   min-height: 100vh;
 }
-.page p {
-  color: white;
+.challenge-card .qzz-title{
+  color:white;
 }
 .challenge-heading {
   text-align: center;
   font-size: 2.5rem;
-  color: #394867;
+  color: white;
   margin-bottom: 10px;
 }
 
