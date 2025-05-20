@@ -55,6 +55,7 @@
 //   instructorName: {
 //     type: String,
 //     required: true
+
 //   },
 //   instructorId: {
 //     type: mongoose.Schema.Types.ObjectId,

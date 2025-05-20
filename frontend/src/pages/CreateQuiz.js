@@ -304,10 +304,21 @@ const CreateQuiz = () => {
       })
       .filter((q) => q !== null);
 
+    // const quizData = {
+    //   testName,
+    //   description,
+    //   subjectName,
+    //   duration: parseInt(duration),
+    //   startTime: new Date(startTime),
+    //   endTime: endTime ? new Date(endTime) : null,
+    //   questions: formattedQuestions,
+    //   instructorName: instructor.username,
+    //   instructorId: instructor.userid,
+    // };
     const quizData = {
       testName,
       description,
-      subjectName,
+      subjectName: subjectName.toLowerCase(), // 👈 lowercase conversion
       duration: parseInt(duration),
       startTime: new Date(startTime),
       endTime: endTime ? new Date(endTime) : null,
@@ -315,14 +326,12 @@ const CreateQuiz = () => {
       instructorName: instructor.username,
       instructorId: instructor.userid,
     };
-
     try {
       const response = await fetch("http://localhost:5001/quiz/saveQuiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(quizData),
       });
-
       const data = await response.json();
       if (response.ok) {
         alert("Quiz saved successfully!");

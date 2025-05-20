@@ -37,8 +37,8 @@ app.use(cors());
 app.use(express.json());
 
 const upload = multer({ dest: "uploads/" });
-const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.zauvqnf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-// const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.d19uias.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+// const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.zauvqnf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = process.env.MONGO_URI || 'mongodb+srv://nithin:9804@cluster0.d19uias.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,

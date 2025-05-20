@@ -5,5 +5,5 @@ const router = express.Router();
 
 router.get('/', getAllQuizzes);
 
-router.get('/:id', getQuizById); // 👈 Add this line
+router.get('/:id', getQuizById); // 👈 Add this line 
 export default router;
