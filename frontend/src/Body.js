@@ -11,7 +11,6 @@
 // const thirdSub={course:"COURSE",sub:"CSS",details:"Learn to use CSS selectors and properties to stylize your HTML pages with colors, fonts, sizing, layouts, and more!"}
 // const fourthSub={course:"COURSE",sub:"Math",details:"Learn to solve problems, understand concepts, and sharpen your logic with interactive Math challenges!"}
 
-
 // const firstAbout={img:"https://www.avanse.com/blogs/images/next-top-30.jpg",topic:"Level up your learning",ctnt:"Gain XP and collect badges as you complete bite-sized lessons in Python, HTML, JavaScript, and more. Our beginner-friendly curriculum makes learning to code as motivating as completing your next quest."}
 // const secondAbout={img:"https://www.avanse.com/blogs/images/next-top-30.jpg",topic:"Practice your coding chops",ctnt:"Take your skills further with code challenges and project tutorials designed to help you apply what you learned to real-world problems and examples."}
 // const thirdAbout={img:"https://www.avanse.com/blogs/images/next-top-30.jpg",topic:"Smart Chatbot for quick explanations",ctnt:"Stuck on a tricky question or need a quick concept refresh? Our AI-powered chatbot has your back! Just ask, and get instant, beginner-friendly answers — no need to leave your quiz or dig through search results. It’s like having a personal tutor available 24/7, right inside Quizzify."}
@@ -93,13 +92,17 @@
 // };
 
 // export default Body;
-import React, { useEffect, useState } from 'react';
-import questionVideo from './imagesVideos/question.mp4';
+import React, { useEffect, useState } from "react";
+import questionVideo from "./imagesVideos/question.mp4";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import Left from "./leftcnt.js";
 import Right from "./rightcnt.js";
-import { faUserPlus, faGamepad, faBookOpen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserPlus,
+  faGamepad,
+  faBookOpen,
+} from "@fortawesome/free-solid-svg-icons";
 import "./styles/body.css";
 
 const Body = () => {
@@ -107,14 +110,14 @@ const Body = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     return user?.role || "default";
   });
-  
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user?.role) {
       setRole(user.role);
     }
   }, []);
-  
+
   if (role === "teacher") {
     return (
       <section className="section" id="teacher-view">
@@ -128,18 +131,32 @@ const Body = () => {
           <div className="teacher-cards">
             <div className="card">
               <h3>Create Quizzes</h3>
-              <p>Design custom quizzes for your students and track their performance.</p>
-              <Link to="/create-quiz" className="btn2">Create Now</Link>
+              <p>
+                Design custom quizzes for your students and track their
+                performance.
+              </p>
+              <Link to="/create-quiz" className="btn2">
+                Create Now
+              </Link>
             </div>
             <div className="card">
               <h3>View Reports</h3>
-              <p>Get detailed insights on student progress, strengths, and gaps.</p>
-              <Link to="/leaderboard" className="btn2">View Reports</Link>
+              <p>
+                Get detailed insights on student progress, strengths, and gaps.
+              </p>
+              <Link to="/leaderboard" className="btn2">
+                View Reports
+              </Link>
             </div>
             <div className="card">
               <h3>Create a Thirty-Day Challenge</h3>
-              <p>Design and launch a thirty-day challenge to engage and motivate your students consistently.</p>
-              <Link to="/ctdch" className="btn2">Start Creating</Link>
+              <p>
+                Design and launch a thirty-day challenge to engage and motivate
+                your students consistently.
+              </p>
+              <Link to="/ctdch" className="btn2">
+                Start Creating
+              </Link>
             </div>
           </div>
         </section>
@@ -153,7 +170,9 @@ const Body = () => {
         <section className="student-hero">
           <h1>Welcome, Student!</h1>
           <p>Keep learning, keep growing 🌱</p>
-          <Link to="/courses" className="btn1">Explore Subjects</Link>
+          <Link to="/courses" className="btn1">
+            Explore Subjects
+          </Link>
         </section>
 
         <section className="student-highlights">
@@ -161,18 +180,30 @@ const Body = () => {
           <div className="student-cards">
             <div className="card">
               <h3>Continue Learning</h3>
-              <p>Pick up where you left off and finish your pending quizzes and lessons.</p>
-              <Link to="/resume" className="btn2">Resume Course</Link>
+              <p>
+                Pick up where you left off and finish your pending quizzes and
+                lessons.
+              </p>
+              <Link to="/resume" className="btn2">
+                Resume Course
+              </Link>
             </div>
             <div className="card">
               <h3>Leaderboard</h3>
               <p>See how you rank among your peers in quiz scores and XP!</p>
-              <Link to="/leaderboard" className="btn2">View Leaderboard</Link>
+              <Link to="/leaderboard" className="btn2">
+                View Leaderboard
+              </Link>
             </div>
             <div className="card">
               <h3>Chat With friends</h3>
-              <p>Interact with friends, compete with them, and improve your skills.</p>
-              <Link to="/chat" className="btn2">Chat Now</Link>
+              <p>
+                Interact with friends, compete with them, and improve your
+                skills.
+              </p>
+              <Link to="/chat" className="btn2">
+                Chat Now
+              </Link>
             </div>
           </div>
         </section>
@@ -187,7 +218,9 @@ const Body = () => {
         <div className="content">
           <h1>Boost Your Learning with Quizzify</h1>
           <p>Challenge yourself with engaging quizzes & master new skills.</p>
-          <Link to="/signup" className="btn1">Get Started</Link>
+          <Link to="/signup" className="btn1">
+            Lets Get Started
+          </Link>
         </div>
       </section>
 
@@ -220,7 +253,9 @@ const Body = () => {
           <SubBox {...thirdSub} />
           <SubBox {...fourthSub} />
         </div>
-        <Link to="/courses" className="btn1">Explore All Subjects</Link>
+        <Link to="/courses" className="btn1">
+          Explore All Subjects
+        </Link>
       </div>
 
       <Left {...firstAbout} />
@@ -234,7 +269,9 @@ const Body = () => {
         </video>
         <div className="urke">
           <h2>Ready to Get Started?</h2>
-          <Link to="/signup" className="btn4">Join Now for Free</Link>
+          <Link to="/signup" className="btn4">
+            Join Now for Free
+          </Link>
         </div>
       </section>
     </section>
@@ -257,43 +294,46 @@ const SubBox = ({ course, sub, details }) => (
 const firstSub = {
   course: "COURSE",
   sub: "Python",
-  details: "Learn programming fundamentals such as variables, control flow, and loops with Python!"
+  details:
+    "Learn programming fundamentals such as variables, control flow, and loops with Python!",
 };
 const secondSub = {
   course: "COURSE",
   sub: "Html",
-  details: "Create your first website with HTML and dive into web development."
+  details: "Create your first website with HTML and dive into web development.",
 };
 const thirdSub = {
   course: "COURSE",
   sub: "CSS",
-  details: "Use CSS to stylize your HTML pages with colors, fonts, layouts, and more!"
+  details:
+    "Use CSS to stylize your HTML pages with colors, fonts, layouts, and more!",
 };
 const fourthSub = {
   course: "COURSE",
   sub: "Math",
-  details: "Solve problems and sharpen your logic with interactive Math challenges!"
+  details:
+    "Solve problems and sharpen your logic with interactive Math challenges!",
 };
 
 const firstAbout = {
   img: "https://www.avanse.com/blogs/images/next-top-30.jpg",
   topic: "Level up your learning",
-  ctnt: "Gain XP and badges as you complete bite-sized lessons."
+  ctnt: "Gain XP and badges as you complete bite-sized lessons.",
 };
 const secondAbout = {
   img: "https://www.avanse.com/blogs/images/next-top-30.jpg",
   topic: "Practice your coding chops",
-  ctnt: "Take your skills further with code challenges and projects."
+  ctnt: "Take your skills further with code challenges and projects.",
 };
 const thirdAbout = {
   img: "https://www.avanse.com/blogs/images/next-top-30.jpg",
   topic: "Smart Chatbot for quick explanations",
-  ctnt: "Get instant, beginner-friendly answers from our AI tutor!"
+  ctnt: "Get instant, beginner-friendly answers from our AI tutor!",
 };
 const fourthAbout = {
   img: "https://www.avanse.com/blogs/images/next-top-30.jpg",
   topic: "Make friends along the way",
-  ctnt: "Join our community forums to collaborate and connect."
+  ctnt: "Join our community forums to collaborate and connect.",
 };
 
 export default Body;
